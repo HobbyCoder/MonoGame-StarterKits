@@ -76,7 +76,7 @@ namespace Platformer
 			graphics.IsFullScreen = true;
 			graphics.SupportedOrientations =  DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 #endif		
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE || ANDROID || IPHONE
             Accelerometer.Initialize();
 #endif
 
@@ -133,18 +133,23 @@ namespace Platformer
         private void HandleInput()
         {
             // get all of our input states
+#if !IPHONE
             keyboardState = Keyboard.GetState();
             gamePadState = GamePad.GetState(PlayerIndex.One);
+#endif
             touchState = TouchPanel.GetState();
             accelerometerState = Accelerometer.GetState();
 
+#if !IPHONE
             // Exit the game when back is pressed.
             if (gamePadState.Buttons.Back == ButtonState.Pressed)
                 Exit();
-
+#endif
             bool continuePressed =
+#if !IPHONE
                 keyboardState.IsKeyDown(Keys.Space) ||
                 gamePadState.IsButtonDown(Buttons.A) ||
+#endif
                 touchState.AnyTouch();
 
             // Perform the appropriate action to advance the game and
