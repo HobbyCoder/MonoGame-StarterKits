@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorRumble.iOS", "iOS\Vec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryMadness", "iOS\MemoryMadness\MemoryMadness.csproj", "{296EBAC0-9658-474D-9A9E-5A8F52BA316F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter", "iOS\Shooter\Shooter.csproj", "{00482825-D020-493D-AADA-924E766BFAEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -29,6 +31,14 @@ Global
 		Release|iPhone = Release|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{00482825-D020-493D-AADA-924E766BFAEE}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{00482825-D020-493D-AADA-924E766BFAEE}.Debug|iPhone.Build.0 = Debug|iPhone
+		{00482825-D020-493D-AADA-924E766BFAEE}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{00482825-D020-493D-AADA-924E766BFAEE}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{00482825-D020-493D-AADA-924E766BFAEE}.Release|iPhone.ActiveCfg = Release|iPhone
+		{00482825-D020-493D-AADA-924E766BFAEE}.Release|iPhone.Build.0 = Release|iPhone
+		{00482825-D020-493D-AADA-924E766BFAEE}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{00482825-D020-493D-AADA-924E766BFAEE}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{1112251F-412F-443D-AA19-BDB5FA6B3CBA}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{1112251F-412F-443D-AA19-BDB5FA6B3CBA}.Debug|iPhone.Build.0 = Debug|iPhone
 		{1112251F-412F-443D-AA19-BDB5FA6B3CBA}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
@@ -107,7 +117,7 @@ Global
 		{91CF4A04-9FDC-471D-AED0-D8F057068230} = {73DDE8DB-4345-43F2-9371-0A19FC669324}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = iOS\Platformer\Platformer.csproj
+		StartupItem = iOS\Shooter\Shooter.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.RemoveTrailingWhitespace = True
