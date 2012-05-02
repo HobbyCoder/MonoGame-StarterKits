@@ -126,44 +126,10 @@ namespace Shooter
             //Set player's score to zero
             score = 0;
 
-#if WINDOWS_PHONE
-
-            Accelerometer accelSensor = new Accelerometer();
-            // Start the accelerometer
-            try
-            {
-                accelSensor.Start();
-                accelActive = true;
-                accelSensor.ReadingChanged += new EventHandler<AccelerometerReadingEventArgs>(accel_ReadingChanged);
-            }
-            catch (AccelerometerFailedException e)
-            {
-                // the accelerometer couldn't be started.  No fun!
-                accelActive = false;
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This exception is thrown in the emulator-which doesn't support an accelerometer.
-                accelActive = false;
-            }
-            
-#endif
-
             // TODO: Add your initialization logic here
             base.Initialize();
-            
-
         }
 
-#if WINDOWS_PHONE
-
-        void accel_ReadingChanged(object sender, AccelerometerReadingEventArgs e)
-        {
-            player.Position.X += (float)e.Y * playerMoveSpeed;
-            player.Position.Y += (float)e.X * playerMoveSpeed;
-        }
-
-#endif
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -194,8 +160,8 @@ namespace Shooter
             //gameplayMusic = Content.Load<Song>("Sound/gameMusic");
 
             // Load the laser and explosion sound effect
-            laserSound = Content.Load<SoundEffect>("Sound/laserFire");
-            explosionSound = Content.Load<SoundEffect>("Sound/explosionsound");
+            laserSound = Content.Load<SoundEffect>("Sounds/laserFire");
+            explosionSound = Content.Load<SoundEffect>("Sounds/explosion");
 
             // Start the music right away
             PlayMusic(gameplayMusic);
