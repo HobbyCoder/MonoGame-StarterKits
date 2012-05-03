@@ -1097,7 +1097,7 @@ namespace Blackjack
 
             // Add a component for an empty stalling animation. This actually acts
             // as a timer.
-            Texture2D texture = this.Game.Content.Load<Texture2D>(@"Images\youlose");
+            Texture2D texture = this.Game.Content.Load<Texture2D>(@"Images\youLose");
             animationComponent = new AnimatedGameComponent(this, texture)
             {
                 CurrentPosition = new Vector2(

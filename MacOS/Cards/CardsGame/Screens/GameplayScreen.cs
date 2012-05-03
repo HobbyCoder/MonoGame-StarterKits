@@ -173,7 +173,7 @@ namespace Blackjack
             player.Stand += player_Stand;
 
             // Load UI assets
-            string[] assets = { "blackjack", "bust", "lose", "push", "win", "pass", "shuffle_" + theme };
+            string[] assets = { "blackjack", "bust", "lose", "push", "win", "pass", "Shuffle_" + theme };
 
             for (int chipIndex = 0; chipIndex < assets.Length; chipIndex++)
             {
