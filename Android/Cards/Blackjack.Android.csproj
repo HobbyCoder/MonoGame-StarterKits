@@ -443,13 +443,13 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MonoGame\MonoGame.Framework\MonoGame.Framework.Android.csproj">
-      <Project>{BA9476CF-99BA-4D03-92F2-73D2C5E58883}</Project>
-      <Name>MonoGame.Framework.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="CardsFramework.Android.csproj">
       <Project>{25465464-21B2-4C14-8E3C-3B9F8C131484}</Project>
       <Name>CardsFramework.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Framework\MonoGame.Framework.Android.csproj">
+      <Project>{BA9476CF-99BA-4D03-92F2-73D2C5E58883}</Project>
+      <Name>MonoGame.Framework.Android</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
