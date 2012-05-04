@@ -72,6 +72,8 @@
     <AndroidResource Include="Resources\Layout\edit_payload.axml" />
     <AndroidResource Include="Resources\Layout\item_row.axml" />
     <AndroidResource Include="Resources\Layout\main.axml" />
+    <None Include="README.txt" />
+    <None Include="market_billing.zip" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />
