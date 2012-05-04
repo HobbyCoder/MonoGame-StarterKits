@@ -22,7 +22,7 @@ namespace com.example.dungeons
          *            if true, in-app billing is supported. Otherwise, it isn't.
          * @see BillingController#checkBillingSupported(android.content.Context)
          */
-        public void onBillingChecked(bool supported);
+        void onBillingChecked(bool supported);
 
         /**
          * Called after requesting the purchase of the specified item.

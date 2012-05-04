@@ -19,8 +19,8 @@ using System.Collections.Generic;
 namespace com.example.dungeons
 {
 
-    using RequestPurchase = com.example.dungeons.BillingService.RequestPurchase;
-    using RestoreTransactions = com.example.dungeons.BillingService.RestoreTransactions;
+    using RequestPurchase = com.example.dungeons.BillingRequest.RequestPurchase;
+    using RestoreTransactions = com.example.dungeons.BillingRequest.RestoreTransactions;
     using PurchaseState = com.example.dungeons.Consts.PurchaseState;
     using ResponseCode = com.example.dungeons.Consts.ResponseCode;
 
@@ -194,9 +194,8 @@ namespace com.example.dungeons
             //mOwnedItemsTable.setAdapter(adapter);
         }
 
-        public class BillingObserver : AbstractBillingObserver
+        public class BillingObserver : IBillingObserver
         {
-
             public override void onBillingChecked(bool supported) {
                 onBillingChecked(supported);
             }

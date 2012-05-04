@@ -23,43 +23,82 @@ namespace com.example.dungeons
     public abstract class AbstractBillingObserver : IBillingObserver
     {
 
-        protected const String KEY_TRANSACTIONS_RESTORED = "net.robotmedia.billing.transactionsRestored";
+        //protected const String KEY_TRANSACTIONS_RESTORED = "net.robotmedia.billing.transactionsRestored";
 
-        protected Activity activity;
+        //protected Activity activity;
 
-        public AbstractBillingObserver(Activity activity)
+        //public AbstractBillingObserver(Activity activity)
+        //{
+        //    this.activity = activity;
+        //}
+
+        //public bool isTransactionsRestored()
+        //{
+        //    ISharedPreferences preferences = PreferenceManager.GetDefaultSharedPreferences(activity);
+        //    return preferences.GetBoolean(KEY_TRANSACTIONS_RESTORED, false);
+        //}
+
+        ///**
+        // * Called after requesting the purchase of the specified item. The default
+        // * implementation simply starts the pending intent.
+        // * 
+        // * @param itemId
+        // *            id of the item whose purchase was requested.
+        // * @param purchaseIntent
+        // *            a purchase pending intent for the specified item.
+        // */
+
+        //public override void onPurchaseIntent(String itemId, PendingIntent purchaseIntent)
+        //{
+        //    BillingController.startPurchaseIntent(activity, purchaseIntent, null);
+        //}
+
+        //public override void onTransactionsRestored()
+        //{
+        //    ISharedPreferences preferences = PreferenceManager.GetDefaultSharedPreferences(activity);
+        //    ISharedPreferencesEditor editor = preferences.Edit();
+        //    editor.PutBoolean(KEY_TRANSACTIONS_RESTORED, true);
+        //    editor.Commit();
+        //}
+
+
+        //public void onBillingChecked(bool supported)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void onPurchaseStateChanged(string itemId, Consts.PurchaseState state)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void onRequestPurchaseResponse(string itemId, Consts.ResponseCode response)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        public void onBillingChecked(bool supported)
         {
-            this.activity = activity;
+            throw new NotImplementedException();
         }
 
-        public bool isTransactionsRestored()
+        public void onPurchaseIntent(string itemId, PendingIntent purchaseIntent)
         {
-            ISharedPreferences preferences = PreferenceManager.GetDefaultSharedPreferences(activity);
-            return preferences.GetBoolean(KEY_TRANSACTIONS_RESTORED, false);
+            throw new NotImplementedException();
         }
 
-        /**
-         * Called after requesting the purchase of the specified item. The default
-         * implementation simply starts the pending intent.
-         * 
-         * @param itemId
-         *            id of the item whose purchase was requested.
-         * @param purchaseIntent
-         *            a purchase pending intent for the specified item.
-         */
-
-        public override void onPurchaseIntent(String itemId, PendingIntent purchaseIntent)
+        public void onPurchaseStateChanged(string itemId, Consts.PurchaseState state)
         {
-            BillingController.startPurchaseIntent(activity, purchaseIntent, null);
+            throw new NotImplementedException();
         }
 
-        public override void onTransactionsRestored()
+        public void onRequestPurchaseResponse(string itemId, Consts.ResponseCode response)
         {
-            ISharedPreferences preferences = PreferenceManager.GetDefaultSharedPreferences(activity);
-            ISharedPreferencesEditor editor = preferences.Edit();
-            editor.PutBoolean(KEY_TRANSACTIONS_RESTORED, true);
-            editor.Commit();
+            throw new NotImplementedException();
         }
 
+        public void onTransactionsRestored()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

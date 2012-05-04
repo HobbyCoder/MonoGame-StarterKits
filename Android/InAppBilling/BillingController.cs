@@ -16,7 +16,6 @@ using System.Json;
 namespace com.example.dungeons
 {
     using ResponseCode = Consts.ResponseCode;
-    using BillingRequest = com.example.dungeons.BillingService;
 
     public class BillingController
     {
@@ -57,9 +56,9 @@ namespace com.example.dungeons
 
         private const String JSON_NONCE = "nonce";
         private const String JSON_ORDERS = "orders";
-        private Dictionary<String, String> manualConfirmations = new Dictionary<String, String>();
+        private static Dictionary<string, HashSet<String>> manualConfirmations = new Dictionary<String, HashSet<String>>();
 
-        private static IEnumerable<IBillingObserver> observers = new HashSet<IBillingObserver>();
+        private static List<IBillingObserver> observers = new List<IBillingObserver>();
 
         public const String LOG_TAG = "Billing";
 
@@ -76,10 +75,10 @@ namespace com.example.dungeons
          */
         private void addManualConfirmation(string itemId, string notificationId)
         {
-            List<String> notifications = manualConfirmations.Keys.ToList();
+            HashSet<String> notifications = manualConfirmations[itemId];
             if (notifications == null)
             {
-                notifications = new List<String>();
+                notifications = new HashSet<String>();
                 manualConfirmations.Add(itemId, notifications);
             }
             notifications.Add(notificationId);
@@ -162,14 +161,7 @@ namespace com.example.dungeons
             return TransactionManager.countPurchases(context, itemId);
         }
 
-        protected static void debug(String message)
-        {
-            if (debug)
-            {
-                Log.Debug(LOG_TAG, message);
-            }
-        }
-
+     
         /**
          * Requests purchase information for the specified notification. Immediately
          * followed by a call to
@@ -329,11 +321,13 @@ namespace com.example.dungeons
          * @param purchaseIntent
          *            intent to purchase the item.
          */
-        protected static void onPurchaseIntent(String itemId, PendingIntent purchaseIntent) {
-		foreach (IBillingObserver o in observers) {
-			o.onPurchaseIntent(itemId, purchaseIntent);
-		}
-	}
+        protected static void onPurchaseIntent(String itemId, PendingIntent purchaseIntent)
+        {
+            foreach (IBillingObserver o in observers)
+            {
+                o.onPurchaseIntent(itemId, purchaseIntent);
+            }
+        }
 
         /**
          * Called after the response to a
@@ -624,12 +618,13 @@ namespace com.example.dungeons
             }
         }
 
-        static void storeTransaction(Context context, Transaction t)
-        {
-            Transaction t2 = t.clone();
-            obfuscate(context, t2);
-            TransactionManager.addTransaction(context, t2);
-        }
+
+
+        static void storeTransaction(Context context, Transaction t) {
+		final Transaction t2 = t.clone();
+		obfuscate(context, t2);
+		TransactionManager.addTransaction(context, t2);
+	}
 
         static void unobfuscate(Context context, List<Transaction> transactions)
         {
@@ -659,17 +654,20 @@ namespace com.example.dungeons
             purchase.developerPayload = Security.unobfuscate(context, salt, purchase.developerPayload);
         }
 
+
+
+
         /**
-         * Unregisters the specified billing observer.
-         * 
-         * @param observer
-         *            the billing observer to unregister.
-         * @return true if the billing observer was unregistered, false otherwise.
-         * @see #registerObserver(IBillingObserver)
-         */
+        * Unregisters the specified billing observer.
+        * 
+        * @param observer
+        * the billing observer to unregister.
+        * @return true if the billing observer was unregistered, false otherwise.
+        * @see #registerObserver(IBillingObserver)
+        */
         public static bool unregisterObserver(IBillingObserver observer)
         {
-            return observers.remove(observer);
+            return observers.Remove(observer);
         }
 
         private static bool verifyNonce(JsonObject data)
@@ -686,13 +684,14 @@ namespace com.example.dungeons
             }
         }
 
-        protected static void onRequestPurchaseResponse(String itemId, BillingRequest.ResponseCode response)
+        protected static void onRequestPurchaseResponse(String itemId, ResponseCode response)
         {
             foreach (IBillingObserver o in observers)
             {
                 o.onRequestPurchaseResponse(itemId, response);
             }
         }
+
 
     }
 }

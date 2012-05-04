@@ -9,20 +9,14 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-
-using System;
 using Android.Util;
-
-
-using System;
-
 // Copyright 2010 Google Inc. All Rights Reserved.
 
 namespace com.example.dungeons
 {
 
-    using RequestPurchase = com.example.dungeons.BillingService.RequestPurchase;
-    using RestoreTransactions = com.example.dungeons.BillingService.RestoreTransactions;
+    using RequestPurchase = com.example.dungeons.BillingRequest.RequestPurchase;
+    using RestoreTransactions = com.example.dungeons.BillingRequest.RestoreTransactions;
     using PurchaseState = com.example.dungeons.Consts.PurchaseState;
     using ResponseCode = com.example.dungeons.Consts.ResponseCode;
     using Java.Lang;
@@ -142,7 +136,7 @@ namespace com.example.dungeons
                 }
                 catch (Exception e)
                 {
-                    Log.e(TAG, "error starting activity", e);
+                    Log.Error(TAG, "error starting activity", e);
                 }
             }
             else
