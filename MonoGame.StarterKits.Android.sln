@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marblets", "Android\Marblet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorRumble", "Android\VectorRumble\VectorRumble.csproj", "{BF1FD50E-FB30-4E77-B8C0-77D933DA466C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter", "Shooter\Shooter.csproj", "{99EC98D8-CFFF-452C-8F3F-EE2C5B57F00D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter", "Android\Shooter\Shooter.csproj", "{99EC98D8-CFFF-452C-8F3F-EE2C5B57F00D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +61,6 @@ Global
 		{9B7D8FCF-5A3B-48D6-B9E7-4C3C0D0632F6} = {ED1C24CA-3D94-4BDF-9B56-1B5866E40BB2}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Shooter\Shooter.csproj
+		StartupItem = Android\Shooter\Shooter.csproj
 	EndGlobalSection
 EndGlobal

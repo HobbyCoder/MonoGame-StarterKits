@@ -76,7 +76,7 @@ namespace Platformer
 			graphics.IsFullScreen = true;
 			graphics.SupportedOrientations =  DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 #endif		
-#if WINDOWS_PHONE || ANDROID || IPHONE
+#if WINDOWS_PHONE 
             Accelerometer.Initialize();
 #endif
 
