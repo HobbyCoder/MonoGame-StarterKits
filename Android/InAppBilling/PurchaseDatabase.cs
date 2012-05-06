@@ -159,7 +159,7 @@ namespace com.example.dungeons
                 while (ICursor.MoveToNext())
                 {
                     int stateIndex = ICursor.GetInt(2);
-                    PurchaseState state = PurchaseState.valueOf(stateIndex);
+                    PurchaseState state = (PurchaseState)stateIndex;
                     // Note that a refunded purchase is treated as a purchase. Such
                     // a friendly refund policy is nice for the user.
                     if (state == PurchaseState.PURCHASED || state == PurchaseState.REFUNDED)

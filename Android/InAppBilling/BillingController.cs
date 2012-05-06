@@ -16,6 +16,7 @@ using System.Json;
 namespace com.example.dungeons
 {
     using ResponseCode = Consts.ResponseCode;
+    using PurchaseState = Consts.PurchaseState;
 
     public class BillingController
     {
@@ -44,7 +45,7 @@ namespace com.example.dungeons
              * 
              * @return Base64 encoded public key.
              */
-            String getPublicKey();
+            string getPublicKey();
         }
 
         private static BillingStatus status = BillingStatus.UNKNOWN;
@@ -62,7 +63,7 @@ namespace com.example.dungeons
 
         public const String LOG_TAG = "Billing";
 
-        private Dictionary<Java.Lang.Long, BillingRequest> pendingRequests = new Dictionary<Java.Lang.Long, BillingRequest>();
+        static Dictionary<long, BillingRequest> pendingRequests = new Dictionary<long, BillingRequest>();
 
         /**
          * Adds the specified notification to the set of manual confirmations of the
@@ -139,28 +140,29 @@ namespace com.example.dungeons
          * @param notifyIds
          *            array with the ids of all the notifications to confirm.
          */
-        private static void confirmNotifications(Context context, String[] notifyIds)
+        private static void confirmNotifications(Context context, string[] notifyIds)
         {
-            BillingService.confirmNotifications(context, notifyIds);
+            Intent intent = new Intent(context, typeof(BillingController));
+            BillingService bis = new BillingService();
+            bis.confirmNotifications(intent, int.Parse(notifyIds[0]));
         }
 
         /**
-         * Returns the number of purchases for the specified item. Refunded and
-         * cancelled purchases are not subtracted. See
-         * {@link #countPurchasesNet(Context, String)} if they need to be.
-         * 
-         * @param context
-         * @param itemId
-         *            id of the item whose purchases will be counted.
-         * @return number of purchases for the specified item.
-         */
-        public static int countPurchases(Context context, String itemId)
+	 * Returns the number of purchases for the specified item. Refunded and
+	 * cancelled purchases are not subtracted. See
+	 * {@link #countPurchasesNet(Context, String)} if they need to be.
+	 * 
+	 * @param context
+	 * @param itemId
+	 *            id of the item whose purchases will be counted.
+	 * @return number of purchases for the specified item.
+	 */
+        public static int countPurchases(Context context, string itemId) 
         {
-            byte[] salt = getSalt();
-            itemId = salt != null ? Security.Obfuscate(context, salt, itemId) : itemId;
-            return TransactionManager.countPurchases(context, itemId);
-        }
-
+		    byte[] salt = getSalt();
+		    itemId = salt != null ? Security.obfuscate(context, salt, itemId) : itemId;
+		    return TransactionManager.countPurchases(context, itemId);
+	    }
      
         /**
          * Requests purchase information for the specified notification. Immediately
@@ -174,10 +176,10 @@ namespace com.example.dungeons
          *            id of the notification whose purchase information is
          *            requested.
          */
-        private static void getPurchaseInformation(Context context, Java.Lang.String notifyId)
+        private static void getPurchaseInformation(Context context, string notifyId)
         {
             long nonce = Security.generateNonce();
-            BillingService.getPurchaseInformation(context, new Java.Lang.String[] { notifyId }, nonce);
+            BillingService.getPurchaseInformation(context, new string[] { notifyId }, nonce);
         }
 
         /**
@@ -252,7 +254,7 @@ namespace com.example.dungeons
          * @param state
          *            new purchase state of the item.
          */
-        private static void notifyPurchaseStateChange(String itemId, Transaction.PurchaseState state)
+        private static void notifyPurchaseStateChange(string itemId, PurchaseState state)
         {
             foreach (IBillingObserver o in observers)
             {
@@ -306,7 +308,7 @@ namespace com.example.dungeons
          */
         protected static void onNotify(Context context, String notifyId)
         {
-            debug("Notification " + notifyId + " available");
+            Log.Info("Info", "Notification " + notifyId + " available");
 
             getPurchaseInformation(context, notifyId);
         }
@@ -321,7 +323,7 @@ namespace com.example.dungeons
          * @param purchaseIntent
          *            intent to purchase the item.
          */
-        protected static void onPurchaseIntent(String itemId, PendingIntent purchaseIntent)
+        public static void onPurchaseIntent(String itemId, PendingIntent purchaseIntent)
         {
             foreach (IBillingObserver o in observers)
             {
@@ -329,83 +331,59 @@ namespace com.example.dungeons
             }
         }
 
-        /**
-         * Called after the response to a
-         * {@link net.robotmedia.billing.request.GetPurchaseInformation} request is
-         * received. Registers all transactions in local memory and confirms those
-         * who can be confirmed automatically.
-         * 
-         * @param context
-         * @param signedData
-         *            signed JSON data received from the Market Billing service.
-         * @param signature
-         *            data signature.
-         */
-        protected static void onPurchaseStateChanged(Context context, String signedData, String signature)
-        {
-            debug("Purchase state changed");
+        public static void onPurchaseStateChanged(Context context, string signedData, string signature) {
+		Log.Info(LOG_TAG, "Purchase state changed");
 
-            if (TextUtils.IsEmpty(signedData))
-            {
-                Log.Warn(LOG_TAG, "Signed data is empty");
-                return;
-            }
+		if (TextUtils.IsEmpty(signedData)) {
+			Log.Warn(LOG_TAG, "Signed data is empty");
+			return;
+		}
 
-            if (!debug)
-            {
-                if (TextUtils.IsEmpty(signature))
-                {
-                    Log.w(LOG_TAG, "Empty signature requires debug mode");
-                    return;
-                }
-                const ISignatureValidator validator = BillingController.validator != null ? BillingController.validator
-                        : new DefaultSignatureValidator(BillingController.configuration);
-                if (!validator.validate(signedData, signature))
-                {
-                    Log.w(LOG_TAG, "Signature does not match data.");
-                    return;
-                }
-            }
+		if (!debug) {
+			if (TextUtils.IsEmpty(signature)) {
+				Log.Warn(LOG_TAG, "Empty signature requires debug mode");
+				return;
+			}
+			 ISignatureValidator validator = BillingController.validator != null ? BillingController.validator
+					: new DefaultSignatureValidator(BillingController.configuration);
+			if (!validator.validate(signedData, signature)) {
+				Log.Warn(LOG_TAG, "Signature does not match data.");
+				return;
+			}
+		}
 
-            List<Transaction> purchases;
-            try
-            {
-                JsonObject jObject = new JsonObject(signedData);
-                if (!verifyNonce(jObject))
-                {
-                    Log.Warn(LOG_TAG, "Invalid nonce");
-                    return;
-                }
-                purchases = parsePurchases(jObject);
-            }
-            catch (Exception e)
-            {
-                Log.Error(LOG_TAG, "JSON exception: ", e);
-                return;
-            }
+		List<Transaction> purchases;
+		try {
+			JsonObject jObject = new JsonObject(signedData);
+			if (!verifyNonce(jObject)) {
+				Log.Warn(LOG_TAG, "Invalid nonce");
+				return;
+			}
+			purchases = parsePurchases(jObject);
+		} catch (Exception e) {
+			Log.Error(LOG_TAG, "JSON exception: ", e);
+			return;
+		}
 
-            List<String> confirmations = new List<String>();
-            foreach (Transaction p in purchases)
-            {
-                if (p.notificationId != null && automaticConfirmations.contains(p.productId))
-                {
-                    confirmations.add(p.notificationId);
-                }
-                else
-                {
-                    // TODO: Discriminate between purchases, cancellations and
-                    // refunds.
-                    addManualConfirmation(p.productId, p.notificationId);
-                }
-                storeTransaction(context, p);
-                notifyPurchaseStateChange(p.productId, p.purchaseState);
-            }
-            if (confirmations.Count() > 0)
-            {
-                const String[] notifyIds = confirmations.ToArray(new String[confirmations.size()]);
-                confirmNotifications(context, notifyIds);
-            }
-        }
+		List<String> confirmations = new List<String>();
+		foreach (Transaction p in purchases) {
+			if (p.notificationId != null && automaticConfirmations.Contains(p.productId)) {
+				confirmations.Add(p.notificationId);
+			} else {
+				// TODO: Discriminate between purchases, cancellations and
+				// refunds.
+                BillingController bc = new BillingController();
+                bc.addManualConfirmation(p.productId, p.notificationId);
+			}
+			storeTransaction(context, p);
+			notifyPurchaseStateChange(p.productId, p.purchaseState);
+		}
+		if (confirmations.Count() != 0) {
+            string[] notifyIds = confirmations.ToArray();
+                //(new String[confirmations.Count()]);
+			confirmNotifications(context, notifyIds);
+		}
+	}
 
         /**
          * Called after a {@link net.robotmedia.billing.BillingRequest} is
@@ -418,7 +396,7 @@ namespace com.example.dungeons
          */
         public static void onRequestSent(long requestId, BillingRequest request)
         {
-            debug("Request " + requestId + " of type " + request.getRequestType() + " sent");
+            Log.Info(LOG_TAG, "Request " + requestId + " of type " + request.getRequestType() + " sent");
 
             if (request.isSuccess())
             {
@@ -444,9 +422,9 @@ namespace com.example.dungeons
         protected static void onResponseCode(Context context, long requestId, int responseCode)
         {
             ResponseCode response = (ResponseCode)responseCode;
-            debug("Request " + requestId + " received response " + response);
+            Log.Info(LOG_TAG, "Request " + requestId + " received response " + response);
 
-            const BillingRequest request = pendingRequests.get(requestId);
+            BillingRequest request = pendingRequests[requestId];
             if (request != null)
             {
                 pendingRequests.remove(requestId);
@@ -501,7 +479,13 @@ namespace com.example.dungeons
          */
         public static bool registerObserver(IBillingObserver observer)
         {
-            return observers.add(observer);
+            if (observers.Contains(observer))
+                return true;
+            else
+            {
+                observers.Add(observer);
+                return false;
+            }
         }
 
         /**
@@ -535,7 +519,7 @@ namespace com.example.dungeons
         {
             if (confirm)
             {
-                automaticConfirmations.add(itemId);
+                automaticConfirmations.Add(itemId);
             }
             BillingService.requestPurchase(context, itemId, null);
         }
@@ -600,7 +584,7 @@ namespace com.example.dungeons
             {
                 // This is on Android 2.0 and beyond. The in-app buy page activity
                 // must be on the activity stack of the application.
-                Compatibility.startIntentSender(activity, purchaseIntent.getIntentSender(), intent);
+                Compatibility.startIntentSender(activity, purchaseIntent.IntentSender, intent);
             }
             else
             {
@@ -609,7 +593,7 @@ namespace com.example.dungeons
                 // stack of the application.
                 try
                 {
-                    purchaseIntent.send(activity, 0 /* code */, intent);
+                    purchaseIntent.Send(activity, 0 /* code */, intent);
                 }
                 catch (Android.App.PendingIntent.CanceledException e)
                 {
@@ -621,7 +605,7 @@ namespace com.example.dungeons
 
 
         static void storeTransaction(Context context, Transaction t) {
-		final Transaction t2 = t.clone();
+		Transaction t2 = t.clone();
 		obfuscate(context, t2);
 		TransactionManager.addTransaction(context, t2);
 	}
@@ -684,7 +668,7 @@ namespace com.example.dungeons
             }
         }
 
-        protected static void onRequestPurchaseResponse(String itemId, ResponseCode response)
+        public static void onRequestPurchaseResponse(String itemId, ResponseCode response)
         {
             foreach (IBillingObserver o in observers)
             {

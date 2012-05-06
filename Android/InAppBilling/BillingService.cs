@@ -134,13 +134,12 @@ namespace com.example.dungeons
             runRequestOrQueue(request);
         }
 
-        private void confirmNotifications(Intent intent, int startId)
-        {
-            string packageName = PackageName;
-            string[] notifyIds = intent.GetStringArrayExtra(EXTRA_NOTIFY_IDS);
-            ConfirmNotifications request = new ConfirmNotifications(packageName, startId, notifyIds);
-            runRequestOrQueue(request);
-        }
+       public void confirmNotifications(Intent intent, int startId) {
+		string packageName = intent.Package;
+		string[] notifyIds = intent.GetStringArrayExtra(EXTRA_NOTIFY_IDS);
+		ConfirmNotifications request = new ConfirmNotifications(packageName, startId, notifyIds);
+		runRequestOrQueue(request);
+	}
 
         private Action getActionFromIntent(Intent intent)
         {

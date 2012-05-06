@@ -12,7 +12,12 @@ using Android.Widget;
 
 namespace com.example.dungeons
 {
-    class CatalogAdapter : ArrayAdapter<string>
+    public class CatalogAdapter : ArrayAdapter<string>
     {
+        public CatalogAdapter(Context context)
+            : base(context, 0)
+        {
+
+        }
     }
 }
