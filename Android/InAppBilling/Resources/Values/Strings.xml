@@ -43,4 +43,5 @@
   <string name="android_test_refunded">android.test.refunded</string>
   <string name="edit_payload_title">edit payload title</string>
   <string name="edit_payload">edit payload</string>
+  <string name="ok">OK</string>
 </resources>

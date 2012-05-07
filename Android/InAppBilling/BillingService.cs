@@ -14,14 +14,14 @@ using System.Runtime.CompilerServices;
 using Android.Util;
 using Java.Lang;
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
-    using ResponseCode = com.example.dungeons.Consts.ResponseCode;
-    using GetPurchaseInformation = com.example.dungeons.BillingRequest.GetPurchaseInformation;
-    using CheckBillingSupported = com.example.dungeons.BillingRequest.CheckBillingSupported;
-    using ConfirmNotifications = com.example.dungeons.BillingRequest.ConfirmNotifications;
-    using RequestPurchase = com.example.dungeons.BillingRequest.RequestPurchase;
-    using RestoreTransactions = com.example.dungeons.BillingRequest.RestoreTransactions;
+    using ResponseCode = InAppBilling.Consts.ResponseCode;
+    using GetPurchaseInformation = InAppBilling.BillingRequest.GetPurchaseInformation;
+    using CheckBillingSupported = InAppBilling.BillingRequest.CheckBillingSupported;
+    using ConfirmNotifications = InAppBilling.BillingRequest.ConfirmNotifications;
+    using RequestPurchase = InAppBilling.BillingRequest.RequestPurchase;
+    using RestoreTransactions = InAppBilling.BillingRequest.RestoreTransactions;
 
     /// <summary>
     /// This class sends messages to Android Market on behalf of the application by
@@ -58,7 +58,7 @@ namespace com.example.dungeons
         /// The list of requests that are pending while we are waiting for the
         /// connection to the MarketBillingService to be established.
         /// </summary>
-        private static LinkedList<BillingRequest> mPendingRequests = new LinkedList<BillingRequest>();
+        private static List<BillingRequest> mPendingRequests = new List<BillingRequest>();
 
         /// <summary>
         /// The list of requests that we have sent to Android Market but for which we have
@@ -246,12 +246,14 @@ namespace com.example.dungeons
         {
             BillingRequest request;
             int maxStartId = -1;
-            while ((request = mPendingRequests.Peek()) != null)
+            for(int i = 0; i < mPendingRequests.Count(); i++)
+            //while ((request = mPendingRequests.Peek()) != null)
             {
                 if (mService != null)
                 {
+                    request = mPendingRequests[i];
                     runRequest(request);
-                    mPendingRequests.remove();
+                    //mPendingRequests[i].
                     if (maxStartId < request.getStartId())
                     {
                         maxStartId = request.getStartId();
@@ -285,7 +287,7 @@ namespace com.example.dungeons
 
         private void runRequestOrQueue(BillingRequest request)
         {
-            mPendingRequests.AddLast(request);
+            mPendingRequests.Add(request);
             if (mService == null)
             {
                 bindMarketBillingService();

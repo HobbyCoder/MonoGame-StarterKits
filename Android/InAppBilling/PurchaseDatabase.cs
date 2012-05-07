@@ -31,12 +31,12 @@ using Android.Util;
  * limitations under the License.
  */
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
 
-    using PurchaseState = com.example.dungeons.Consts.PurchaseState;
-    using ResponseCode = com.example.dungeons.Consts.ResponseCode;
+    using PurchaseState = InAppBilling.Consts.PurchaseState;
+    using ResponseCode = InAppBilling.Consts.ResponseCode;
 
     //using ContentValues = android.content.ContentValues;
     //using Context = android.content.Context;

@@ -12,7 +12,7 @@ using Android.Widget;
 using System.Json;
 
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
     using PurchaseState = Consts.PurchaseState;
 

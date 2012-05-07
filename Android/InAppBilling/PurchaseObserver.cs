@@ -12,13 +12,13 @@ using Android.Widget;
 using Android.Util;
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
-    using RequestPurchase = com.example.dungeons.BillingRequest.RequestPurchase;
-    using RestoreTransactions = com.example.dungeons.BillingRequest.RestoreTransactions;
-    using PurchaseState = com.example.dungeons.Consts.PurchaseState;
-    using ResponseCode = com.example.dungeons.Consts.ResponseCode;
+    using RequestPurchase = InAppBilling.BillingRequest.RequestPurchase;
+    using RestoreTransactions = InAppBilling.BillingRequest.RestoreTransactions;
+    using PurchaseState = InAppBilling.Consts.PurchaseState;
+    using ResponseCode = InAppBilling.Consts.ResponseCode;
     using Java.Lang;
 
 
@@ -163,7 +163,7 @@ namespace com.example.dungeons
         /// <param name="itemId"> a string identifying the item </param>
         /// <param name="quantity"> the quantity of items in this purchase </param>
         //JAVA TO C# CONVERTER WARNING: 'final' parameters are not allowed in .NET:
-        //ORIGINAL LINE: void postPurchaseStateChange(final com.example.dungeons.Consts.PurchaseState purchaseState, final String itemId, final int quantity, final long purchaseTime, final String developerPayload)
+        //ORIGINAL LINE: void postPurchaseStateChange(final InAppBilling.Consts.PurchaseState purchaseState, final String itemId, final int quantity, final long purchaseTime, final String developerPayload)
         internal virtual void postPurchaseStateChange(PurchaseState purchaseState, string itemId, int quantity, long purchaseTime, string developerPayload)
         {
             //JAVA TO C# CONVERTER TODO TASK: Anonymous inner classes are not converted to C# if the base type is not defined in the code being converted:

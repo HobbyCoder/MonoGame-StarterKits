@@ -12,7 +12,7 @@ using Android.Widget;
 using Android.Preferences;
 
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
     /**
  * Abstract subclass of IBillingObserver that provides default implementations

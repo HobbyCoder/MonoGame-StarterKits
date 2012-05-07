@@ -15,7 +15,7 @@ using Java.Security.Spec;
 using Java.Lang;
 using Android.Text;
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
 public class DefaultSignatureValidator : ISignatureValidator {
@@ -34,7 +34,9 @@ public class DefaultSignatureValidator : ISignatureValidator {
 	 */
 	protected IPublicKey generatePublicKey(string encodedPublicKey) {
 		try {
-			byte[] decodedKey = Base64.Decode(encodedPublicKey);
+			//TO DO: base 64 decode
+            byte[] decodedKey = Base64.Decode(encodedPublicKey, 0);
+            //byte[] decodedKey = Base64.Decode(encodedPublicKey);
 			KeyFactory keyFactory = KeyFactory.GetInstance(KEY_FACTORY_ALGORITHM);
 			return keyFactory.GeneratePublic(new X509EncodedKeySpec(decodedKey));
 		} catch (NoSuchAlgorithmException e) {
@@ -62,7 +64,7 @@ public class DefaultSignatureValidator : ISignatureValidator {
 			sig.InitVerify(publicKey);
             System.Text.UTF8Encoding en = new UTF8Encoding();
 			sig.Update(en.GetBytes(signedData));
-			if (!sig.Verify(Base64.Decode(signature))) {
+			if (!sig.Verify(Base64.Decode(signature, 0))) {
 				Log.Error(BillingController.LOG_TAG, "Signature verification failed.");
 				return false;
 			}
@@ -81,7 +83,7 @@ public class DefaultSignatureValidator : ISignatureValidator {
 
 
 	public bool validate(string signedData, string signature) {
-		string publicKey;
+        string publicKey;
 		if (configuration == null || TextUtils.IsEmpty(publicKey = configuration.getPublicKey())) {
 			Log.Warn(BillingController.LOG_TAG, "Please set the public key or turn on debug mode");
 			return false;

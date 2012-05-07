@@ -2,13 +2,13 @@ using System.Runtime.CompilerServices;
 
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
-    using RequestPurchase = com.example.dungeons.BillingRequest.RequestPurchase;
-    using RestoreTransactions = com.example.dungeons.BillingRequest.RestoreTransactions;
-    using PurchaseState = com.example.dungeons.Consts.PurchaseState;
-    using ResponseCode = com.example.dungeons.Consts.ResponseCode;
+    using RequestPurchase = InAppBilling.BillingRequest.RequestPurchase;
+    using RestoreTransactions = InAppBilling.BillingRequest.RestoreTransactions;
+    using PurchaseState = InAppBilling.Consts.PurchaseState;
+    using ResponseCode = InAppBilling.Consts.ResponseCode;
 
     using PendingIntent = Android.App.PendingIntent;
     using Context = Android.Content.Context;
@@ -110,7 +110,7 @@ namespace com.example.dungeons
         /// <param name="developerPayload"> the developer provided "payload" associated with
         ///     the order </param>
         //JAVA TO C# CONVERTER WARNING: 'final' parameters are not allowed in .NET:
-        //ORIGINAL LINE: public static void purchaseResponse(final android.content.Context context, final com.example.dungeons.Consts.PurchaseState purchaseState, final String productId, final String orderId, final long purchaseTime, final String developerPayload)
+        //ORIGINAL LINE: public static void purchaseResponse(final android.content.Context context, final InAppBilling.Consts.PurchaseState purchaseState, final String productId, final String orderId, final long purchaseTime, final String developerPayload)
         public static void purchaseResponse(Context context, PurchaseState purchaseState, string productId, string orderId, long purchaseTime, string developerPayload)
         {
 

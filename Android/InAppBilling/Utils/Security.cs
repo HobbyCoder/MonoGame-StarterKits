@@ -5,12 +5,12 @@ using Java.Security.Spec;
 
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
-    using PurchaseState = com.example.dungeons.Consts.PurchaseState;
-    //using Base64 = com.example.dungeons.util.Base64;
-    //using Base64DecoderException = com.example.dungeons.util.Base64DecoderException;
+    using PurchaseState = InAppBilling.Consts.PurchaseState;
+    //using Base64 = InAppBilling.util.Base64;
+    //using Base64DecoderException = InAppBilling.util.Base64DecoderException;
 
     //using JSONArray = org.json.JSONArray;
     //using JSONException = org.json.JSONException;
@@ -20,7 +20,7 @@ namespace com.example.dungeons
     using Log = Android.Util.Log;
     using Android.Util;
     using Android.Content;
-using Java.Lang;
+    using Java.Lang;
     using Android.Provider;
 
 
@@ -36,51 +36,61 @@ using Java.Lang;
     public class Security
     {
         private static HashSet<long> knownNonces = new HashSet<long>();
-	private static SecureRandom RANDOM = new SecureRandom();
-    private static string TAG = typeof(Security).FullName;
+        private static SecureRandom RANDOM = new SecureRandom();
+        private static string TAG = typeof(Security).FullName;
 
-	/** Generates a nonce (a random number used once). */
-	public static long generateNonce() {
-		long nonce = RANDOM.NextLong();
-		knownNonces.Add(nonce);
-		return nonce;
-	}
+        /** Generates a nonce (a random number used once). */
+        public static long generateNonce()
+        {
+            long nonce = RANDOM.NextLong();
+            knownNonces.Add(nonce);
+            return nonce;
+        }
 
-	public static bool isNonceKnown(long nonce) {
-		return knownNonces.Contains(nonce);
-	}
+        public static bool isNonceKnown(long nonce)
+        {
+            return knownNonces.Contains(nonce);
+        }
 
-	public static void removeNonce(long nonce) {
-		knownNonces.Remove(nonce);
-	}
-	
-	public static string obfuscate(Context context, byte[] salt, string original) {
-		 AESObfuscator obfuscator = getObfuscator(context, salt);
-		    return obfuscator.obfuscate(original);
-	}
-	
-	private static AESObfuscator _obfuscator = null;
-	
-	private static AESObfuscator getObfuscator(Context context, byte[] salt) {
-		if (_obfuscator == null) {
-			string installationId = Installation.id(context);
-			string deviceId = Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
-			string password = installationId + deviceId + context.PackageName;
-			_obfuscator = new AESObfuscator(salt, password);
-		}
-		return _obfuscator;
-	}
-		
+        public static void removeNonce(long nonce)
+        {
+            knownNonces.Remove(nonce);
+        }
 
-        public static string unobfuscate(Context context, byte[] salt, string obfuscated) {
-		    AESObfuscator obfuscator = getObfuscator(context, salt);
-		try {
-			return obfuscator.unobfuscate(obfuscated);
-		} catch (Exception e) {
-			Log.Warn(TAG, "Invalid obfuscated data or key");
-		}
-		return null;
-	}
+        public static string obfuscate(Context context, byte[] salt, string original)
+        {
+            AESObfuscator obfuscator = getObfuscator(context, salt);
+            return obfuscator.obfuscate(original);
+        }
+
+        private static AESObfuscator _obfuscator = null;
+
+        private static AESObfuscator getObfuscator(Context context, byte[] salt)
+        {
+            if (_obfuscator == null)
+            {
+                string installationId = Installation.id(context);
+                string deviceId = Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
+                string password = installationId + deviceId + context.PackageName;
+                _obfuscator = new AESObfuscator(salt, password);
+            }
+            return _obfuscator;
+        }
+
+
+        public static string unobfuscate(Context context, byte[] salt, string obfuscated)
+        {
+            AESObfuscator obfuscator = getObfuscator(context, salt);
+            try
+            {
+                return obfuscator.unobfuscate(obfuscated);
+            }
+            catch (Exception e)
+            {
+                Log.Warn(TAG, "Invalid obfuscated data or key");
+            }
+            return null;
+        }
     }
 
 }

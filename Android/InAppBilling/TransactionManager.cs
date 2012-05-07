@@ -11,7 +11,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Database;
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
     using PurchaseState = Consts.PurchaseState;
     

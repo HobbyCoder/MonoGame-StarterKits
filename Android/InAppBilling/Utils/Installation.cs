@@ -13,7 +13,7 @@ using Java.IO;
 using Java.Lang;
 using Java.Util;
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
     public class Installation
     {

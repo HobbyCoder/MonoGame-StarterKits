@@ -12,7 +12,7 @@ using Android.Widget;
 using Android.Util;
 using Java.Lang;
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
     using ResponseCode = Consts.ResponseCode;
     public abstract class BillingRequest

@@ -13,7 +13,7 @@ using Android.Util;
 using Android.Text;
 using System.Json;
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
     using ResponseCode = Consts.ResponseCode;
     using PurchaseState = Consts.PurchaseState;
@@ -332,57 +332,62 @@ namespace com.example.dungeons
         }
 
         public static void onPurchaseStateChanged(Context context, string signedData, string signature) {
-		Log.Info(LOG_TAG, "Purchase state changed");
+            Log.Info(LOG_TAG, "Purchase state changed");
 
-		if (TextUtils.IsEmpty(signedData)) {
-			Log.Warn(LOG_TAG, "Signed data is empty");
-			return;
-		}
+            if (TextUtils.IsEmpty(signedData))
+            {
+                Log.Warn(LOG_TAG, "Signed data is empty");
+                return;
+            }
 
-		if (!debug) {
-			if (TextUtils.IsEmpty(signature)) {
-				Log.Warn(LOG_TAG, "Empty signature requires debug mode");
-				return;
-			}
-			 ISignatureValidator validator = BillingController.validator != null ? BillingController.validator
-					: new DefaultSignatureValidator(BillingController.configuration);
-			if (!validator.validate(signedData, signature)) {
-				Log.Warn(LOG_TAG, "Signature does not match data.");
-				return;
-			}
-		}
+            if (!debug)
+            {
+                if (TextUtils.IsEmpty(signature))
+                {
+                    Log.Warn(LOG_TAG, "Empty signature requires debug mode");
+                    return;
+                }
+                ISignatureValidator validator = BillingController.validator != null ? BillingController.validator
+                       : new DefaultSignatureValidator(BillingController.configuration);
+                if (!validator.validate(signedData, signature))
+                {
+                    Log.Warn(LOG_TAG, "Signature does not match data.");
+                    return;
+                }
+            }
 
-		List<Transaction> purchases;
-		try {
-			JsonObject jObject = new JsonObject(signedData);
-			if (!verifyNonce(jObject)) {
-				Log.Warn(LOG_TAG, "Invalid nonce");
-				return;
-			}
-			purchases = parsePurchases(jObject);
-		} catch (Exception e) {
-			Log.Error(LOG_TAG, "JSON exception: ", e);
-			return;
-		}
+        //List<Transaction> purchases;
+        //try {
+            //TO DO Json object?
+            //JsonObject jObject = new JsonObject(signedData);
+            //if (!verifyNonce(jObject)) {
+            //    Log.Warn(LOG_TAG, "Invalid nonce");
+            //    return;
+            //}
+			//purchases = parsePurchases(jObject);
+        //} catch (Exception e) {
+        //    Log.Error(LOG_TAG, "JSON exception: ", e);
+        //    return;
+        //}
 
-		List<String> confirmations = new List<String>();
-		foreach (Transaction p in purchases) {
-			if (p.notificationId != null && automaticConfirmations.Contains(p.productId)) {
-				confirmations.Add(p.notificationId);
-			} else {
-				// TODO: Discriminate between purchases, cancellations and
-				// refunds.
-                BillingController bc = new BillingController();
-                bc.addManualConfirmation(p.productId, p.notificationId);
-			}
-			storeTransaction(context, p);
-			notifyPurchaseStateChange(p.productId, p.purchaseState);
-		}
-		if (confirmations.Count() != 0) {
-            string[] notifyIds = confirmations.ToArray();
-                //(new String[confirmations.Count()]);
-			confirmNotifications(context, notifyIds);
-		}
+        //List<String> confirmations = new List<String>();
+        //foreach (Transaction p in purchases) {
+        //    if (p.notificationId != null && automaticConfirmations.Contains(p.productId)) {
+        //        confirmations.Add(p.notificationId);
+        //    } else {
+        //        // TODO: Discriminate between purchases, cancellations and
+        //        // refunds.
+        //        BillingController bc = new BillingController();
+        //        bc.addManualConfirmation(p.productId, p.notificationId);
+        //    }
+        //    storeTransaction(context, p);
+        //    notifyPurchaseStateChange(p.productId, p.purchaseState);
+        //}
+        //if (confirmations.Count() != 0) {
+        //    string[] notifyIds = confirmations.ToArray();
+        //        //(new String[confirmations.Count()]);
+        //    confirmNotifications(context, notifyIds);
+        //}
 	}
 
         /**
@@ -400,7 +405,7 @@ namespace com.example.dungeons
 
             if (request.isSuccess())
             {
-                pendingRequests.put(requestId, request);
+                pendingRequests.Add(requestId, request);
             }
             else if (request.hasNonce())
             {
@@ -427,7 +432,7 @@ namespace com.example.dungeons
             BillingRequest request = pendingRequests[requestId];
             if (request != null)
             {
-                pendingRequests.remove(requestId);
+                pendingRequests.Remove(requestId);
                 request.onResponseCode(response);
             }
         }
@@ -452,19 +457,20 @@ namespace com.example.dungeons
          */
         private static List<Transaction> parsePurchases(JsonObject data)
         {
+            //TO DO: implement JSON parsing
             List<Transaction> purchases = new List<Transaction>();
-            JsonArray orders = data.optJsonArray(JSON_ORDERS);
-            int numTransactions = 0;
-            if (orders != null)
-            {
-                numTransactions = orders.Count();
-            }
-            for (int i = 0; i < numTransactions; i++)
-            {
-                JsonObject jElement = orders.getJSONObject(i);
-                Transaction p = Transaction.parse(jElement);
-                purchases.Add(p);
-            }
+            //JsonArray orders = data.optJsonArray(JSON_ORDERS);
+            //int numTransactions = 0;
+            //if (orders != null)
+            //{
+            //    numTransactions = orders.Count();
+            //}
+            //for (int i = 0; i < numTransactions; i++)
+            //{
+            //    JsonObject jElement = orders.getJSONObject(i);
+            //    Transaction p = Transaction.parse(jElement);
+            //    purchases.Add(p);
+            //}
             return purchases;
         }
 

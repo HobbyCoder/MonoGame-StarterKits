@@ -148,6 +148,9 @@ namespace InAppBilling
 			// aapt resource value: 0x7f050008
 			public const int items_you_own = 2131034120;
 			
+			// aapt resource value: 0x7f050012
+			public const int ok = 2131034130;
+			
 			// aapt resource value: 0x7f05000b
 			public const int potions = 2131034123;
 			

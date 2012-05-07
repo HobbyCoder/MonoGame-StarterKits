@@ -16,7 +16,7 @@
 
 using Android.Content;
 using Android.Util;
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
     /// <summary>

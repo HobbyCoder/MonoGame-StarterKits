@@ -15,6 +15,9 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidSupportedAbis>armeabi</AndroidSupportedAbis>
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractBillingObserver.cs" />
+    <Compile Include="InAppBillingApplication.cs" />
     <Compile Include="BillingController.cs" />
     <Compile Include="BillingDB.cs" />
     <Compile Include="BillingReceiver.cs" />
@@ -55,6 +59,7 @@
     <Compile Include="CatalogAdapter.cs" />
     <Compile Include="CatalogEntry.cs" />
     <Compile Include="DefaultSignatureValidator.cs" />
+    <Compile Include="Dungeons.cs" />
     <Compile Include="PurchaseDatabase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -84,9 +89,11 @@
     <AndroidResource Include="Resources\Layout\billing_not_supported.axml" />
     <AndroidResource Include="Resources\Layout\edit_payload.axml" />
     <AndroidResource Include="Resources\Layout\item_row.axml" />
-    <AndroidResource Include="Resources\Layout\main.axml" />
     <None Include="README.txt" />
     <None Include="market_billing.zip" />
+    <AndroidResource Include="Resources\Layout\main.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />

@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
     /*
@@ -87,9 +87,9 @@ namespace com.example.dungeons
 
         // Intent actions that we send from the BillingReceiver to the
         // BillingService.  Defined by this application.
-        public const string ACTION_CONFIRM_NOTIFICATION = "com.example.dungeons.CONFIRM_NOTIFICATION";
-        public const string ACTION_GET_PURCHASE_INFORMATION = "com.example.dungeons.GET_PURCHASE_INFORMATION";
-        public const string ACTION_RESTORE_TRANSACTIONS = "com.example.dungeons.RESTORE_TRANSACTIONS";
+        public const string ACTION_CONFIRM_NOTIFICATION = "InAppBilling.CONFIRM_NOTIFICATION";
+        public const string ACTION_GET_PURCHASE_INFORMATION = "InAppBilling.GET_PURCHASE_INFORMATION";
+        public const string ACTION_RESTORE_TRANSACTIONS = "InAppBilling.RESTORE_TRANSACTIONS";
 
         // Intent actions that we receive in the BillingReceiver from Market.
         // These are defined by Market and cannot be changed.

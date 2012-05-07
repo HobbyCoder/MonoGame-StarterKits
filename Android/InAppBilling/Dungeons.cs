@@ -16,13 +16,13 @@ using System.Collections.Generic;
  * limitations under the License.
  */
 
-namespace com.example.dungeons
+namespace InAppBilling
 {
 
-    using RequestPurchase = com.example.dungeons.BillingRequest.RequestPurchase;
-    using RestoreTransactions = com.example.dungeons.BillingRequest.RestoreTransactions;
-    using PurchaseState = com.example.dungeons.Consts.PurchaseState;
-    using ResponseCode = com.example.dungeons.Consts.ResponseCode;
+    using RequestPurchase = InAppBilling.BillingRequest.RequestPurchase;
+    using RestoreTransactions = InAppBilling.BillingRequest.RestoreTransactions;
+    using PurchaseState = InAppBilling.Consts.PurchaseState;
+    using ResponseCode = InAppBilling.Consts.ResponseCode;
 
     using Activity = Android.App.Activity;
     using AlertDialog = Android.App.AlertDialog;
@@ -55,9 +55,8 @@ namespace com.example.dungeons
     using Android.Runtime;
     using Android.Widget;
     using Java.Util;
-    using Resource = Android.Resource;
 
-
+    [Android.App.Activity(MainLauncher = true, NoHistory = true)]
     public class Dungeons : Activity
     {
 
@@ -78,8 +77,10 @@ namespace com.example.dungeons
         private Dialog createDialog(int titleId, int messageId)
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            //builder.setTitle(titleId).setIcon(android.R.drawable.stat_sys_warning).setMessage(messageId).setCancelable(
-            //        false).setPositiveButton(android.R.string.ok, null);
+            builder.SetTitle(titleId)
+                .SetIcon(Resource.Drawable.Icon)
+                .SetMessage(messageId);
+                //.SetPositiveButton(Resource.String.ok, null);
             return builder.Create();
         }
 
@@ -90,37 +91,39 @@ namespace com.example.dungeons
                 restoreTransactions();
                 mBuyButton.Enabled = true;
             }
+
             else
             {
                 ShowDialog(DIALOG_BILLING_NOT_SUPPORTED_ID);
             }
         }
 
-        public override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            mBillingObserver = new BillingObserver() as AbstractBillingObserver;
-
             SetContentView(Resource.Layout.main);
-
             setupWidgets();
             BillingController.registerObserver(mBillingObserver);
             BillingController.checkBillingSupported(this);
             updateOwnedItems();
+            onBillingChecked(true);
         }
 
-        //protected Dialog onCreateDialog(int id) {
-        //    switch (id) {
-        //    case DIALOG_BILLING_NOT_SUPPORTED_ID:
-        //        return createDialog(Android.Resource.String.billing_not_supported_title, Android.Resource.String.billing_not_supported_message);
-        //    default:
-        //        return null;
-        //    }
-        //}
+        protected Dialog onCreateDialog(int id)
+        {
+            switch (id)
+            {
+                case DIALOG_BILLING_NOT_SUPPORTED_ID:
+                    return createDialog(Resource.String.billing_not_supported_title, Resource.String.billing_not_supported_message);
+                default:
+                    return null;
+            }
+        }
+
 
         protected override void OnDestroy()
         {
-            //BillingController.unregisterObserver(mBillingObserver);
+            BillingController.unregisterObserver(mBillingObserver);
             base.OnDestroy();
         }
 
@@ -144,69 +147,64 @@ namespace com.example.dungeons
         {
             //if (!mBillingObserver.isTransactionsRestored())
             //{
-            //    BillingController.restoreTransactions(this);
-            //    Toast.MakeText(this, Android.Resource.String.restoring_transactions, ToastLength.Long).show();
+                BillingController.restoreTransactions(this);
+                Toast.MakeText(this, Resource.String.restoring_transactions, ToastLength.Long).Show();
             //}
         }
 
         private void setupWidgets()
         {
-            mBuyButton = (Button)FindViewById(Android.Resource.Id.buy_button);
+            mBuyButton = (Button)FindViewById(Resource.Id.buy_button);
             mBuyButton.Enabled = false;
-            //mBuyButton.setOnClickListener(new OnClickListener() {
+            mBuyButton.Click += delegate
+            {
+                    BillingController.requestPurchase(this, mSku, true /* confirm */);
+            };
 
-            //    @Override
-            //    public void onClick(View v) {
-            //        BillingController.requestPurchase(Dungeons.this, mSku, true /* confirm */);
-            //    }
-            //});
-
-            mSelectItemSpinner = (Spinner)FindViewById(Android.Resource.Id.item_choices);
-            //mCatalogAdapter = new CatalogAdapter(this, CatalogEntry.CATALOG);
+            mSelectItemSpinner = (Spinner)FindViewById(Resource.Id.item_choices);
+            mCatalogAdapter = new CatalogAdapter(this, CatalogEntry.CATALOG);
             mSelectItemSpinner.Adapter = mCatalogAdapter;
-            //mSelectItemSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            mSelectItemSpinner.ItemSelected += delegate(object sender, ItemEventArgs e)
+            {
+                mSku = CatalogEntry.CATALOG[e.Position].sku;
+            };
 
-            //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            //        mSku = CatalogEntry.CATALOG[position].sku;
-            //    }
 
-            //    public void onNothingSelected(AdapterView<?> arg0) {
-            //    }
-
-            //});
-
-            mOwnedItemsTable = (ListView)FindViewById(Android.Resource.Id.owned_items);
+             mOwnedItemsTable = (ListView)FindViewById(Resource.Id.owned_items);
         }
 
         private void updateOwnedItems()
         {
-            //List<Transaction> transactions = BillingController.getTransactions(this);
-            //final ArrayList<String> ownedItems = new ArrayList<String>();
-            //for (Transaction t : transactions) {
-            //    if (t.purchaseState == PurchaseState.PURCHASED) {
-            //        ownedItems.add(t.productId);
-            //    }
-            //}
+            List<Transaction> transactions = BillingController.getTransactions(this);
+            List<string> ownedItems = new List<string>();
+            foreach (Transaction t in transactions) {
+                if (t.purchaseState == PurchaseState.PURCHASED) {
+                    ownedItems.Add(t.productId);
+                }
+            }
 
-            //mCatalogAdapter.setOwnedItems(ownedItems);
-            //final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item_row, R.id.item_name,
-            //        ownedItems);
-            //mOwnedItemsTable.setAdapter(adapter);
+            mCatalogAdapter.setOwnedItems(ownedItems);
+            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Resource.Layout.item_row, Resource.Id.item_name,
+                    ownedItems);
+            mOwnedItemsTable.Adapter = adapter;
         }
 
-        public class BillingObserver : IBillingObserver
+        public class BillingObserver : AbstractBillingObserver
         {
-            public override void onBillingChecked(bool supported) {
+      
+
+            public void onBillingChecked(bool supported) {
                 onBillingChecked(supported);
             }
 
-            public override void onPurchaseStateChanged(string itemId, PurchaseState state) {
+            public void onPurchaseStateChanged(string itemId, PurchaseState state) {
                 onPurchaseStateChanged(itemId, state);
             }
 
-            public override void onRequestPurchaseResponse(string itemId, ResponseCode response) {
+            public void onRequestPurchaseResponse(string itemId, ResponseCode response) {
                 onRequestPurchaseResponse(itemId, response);
             }
+
         };
 
 
