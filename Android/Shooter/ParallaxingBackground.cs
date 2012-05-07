@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Shooter
 {
-    class ParallaxingBackground
+class ParallaxingBackground
     {
         // The image representing the parallaxing background
         Texture2D texture;
@@ -27,7 +27,7 @@ namespace Shooter
 
             // If we divide the screen with the texture width then we can determine the number of tiles need.
             // We add 1 to it so that we won't have a gap in the tiling
-            positions = new Vector2[screenWidth / texture.Width + 1];
+            positions = new Vector2[screenWidth / texture.Width + 2];
 
             // Set the initial positions of the parallaxing background
             for (int i = 0; i < positions.Length; i++)

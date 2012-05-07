@@ -17,7 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marblets", "Android\Marblet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorRumble", "Android\VectorRumble\VectorRumble.csproj", "{BF1FD50E-FB30-4E77-B8C0-77D933DA466C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter", "Shooter\Shooter.csproj", "{99EC98D8-CFFF-452C-8F3F-EE2C5B57F00D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter", "Android\Shooter\Shooter.csproj", "{99EC98D8-CFFF-452C-8F3F-EE2C5B57F00D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InAppBilling", "Android\InAppBilling\InAppBilling.csproj", "{D59CC3E8-DF6E-4A85-986F-110D0DE1EF09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,12 +57,19 @@ Global
 		{BF1FD50E-FB30-4E77-B8C0-77D933DA466C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF1FD50E-FB30-4E77-B8C0-77D933DA466C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF1FD50E-FB30-4E77-B8C0-77D933DA466C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D59CC3E8-DF6E-4A85-986F-110D0DE1EF09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D59CC3E8-DF6E-4A85-986F-110D0DE1EF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D59CC3E8-DF6E-4A85-986F-110D0DE1EF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D59CC3E8-DF6E-4A85-986F-110D0DE1EF09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25465464-21B2-4C14-8E3C-3B9F8C131484} = {ED1C24CA-3D94-4BDF-9B56-1B5866E40BB2}
 		{9B7D8FCF-5A3B-48D6-B9E7-4C3C0D0632F6} = {ED1C24CA-3D94-4BDF-9B56-1B5866E40BB2}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Shooter\Shooter.csproj
+		StartupItem = Android\Shooter\Shooter.csproj
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

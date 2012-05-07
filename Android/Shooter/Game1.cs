@@ -96,7 +96,7 @@ namespace Shooter
         {
             player = new Player();
             // Set a constant player move speed
-            playerMoveSpeed = 8.0f;
+            playerMoveSpeed = 4.0f;
 
             //Enable the FreeDrag gesture.
             TouchPanel.EnabledGestures = GestureType.FreeDrag;
@@ -126,10 +126,44 @@ namespace Shooter
             //Set player's score to zero
             score = 0;
 
+#if WINDOWS_PHONE
+
+            Accelerometer accelSensor = new Accelerometer();
+            // Start the accelerometer
+            try
+            {
+                accelSensor.Start();
+                accelActive = true;
+                accelSensor.ReadingChanged += new EventHandler<AccelerometerReadingEventArgs>(accel_ReadingChanged);
+            }
+            catch (AccelerometerFailedException e)
+            {
+                // the accelerometer couldn't be started.  No fun!
+                accelActive = false;
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                // This exception is thrown in the emulator-which doesn't support an accelerometer.
+                accelActive = false;
+            }
+            
+#endif
+
             // TODO: Add your initialization logic here
             base.Initialize();
+
+
         }
 
+#if WINDOWS_PHONE
+
+        void accel_ReadingChanged(object sender, AccelerometerReadingEventArgs e)
+        {
+            player.Position.X += (float)e.Y * playerMoveSpeed;
+            player.Position.Y += (float)e.X * playerMoveSpeed;
+        }
+
+#endif
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -153,15 +187,14 @@ namespace Shooter
             enemyTexture = Content.Load<Texture2D>("mineAnimation");
             projectileTexture = Content.Load<Texture2D>("laser");
             explosionTexture = Content.Load<Texture2D>("explosion");
-			
-			
+
             mainBackground = Content.Load<Texture2D>("mainbackground");
             // Load the music
-            //gameplayMusic = Content.Load<Song>("Sound/gameMusic");
+            gameplayMusic = Content.Load<Song>("Sounds\\gameMusic");
 
             // Load the laser and explosion sound effect
-            laserSound = Content.Load<SoundEffect>("Sounds/laserFire");
-            explosionSound = Content.Load<SoundEffect>("Sounds/explosion");
+            laserSound = Content.Load<SoundEffect>("Sounds\\laserFire");
+            explosionSound = Content.Load<SoundEffect>("Sounds\\explosion");
 
             // Start the music right away
             PlayMusic(gameplayMusic);
@@ -169,7 +202,7 @@ namespace Shooter
             // Load the score font
             font = Content.Load<SpriteFont>("gameFont");
 
-           
+
         }
 
         private void PlayMusic(Song song)
@@ -241,7 +274,7 @@ namespace Shooter
 
 #endif
 
-            
+
         }
 
         private void AddExplosion(Vector2 position)
@@ -268,7 +301,7 @@ namespace Shooter
 #if MONOGAME
             spriteBatch.Draw(mainBackground, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 1.3f, SpriteEffects.None, 0);
 #endif
-            
+
             // Draw the moving background
             bgLayer1.Draw(spriteBatch);
             bgLayer2.Draw(spriteBatch);
@@ -291,13 +324,13 @@ namespace Shooter
             for (int i = 0; i < explosions.Count; i++)
             {
                 explosions[i].Draw(spriteBatch);
-                
+
             }
 
             // Draw the score
-                spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
-                // Draw the player health
-                spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
+            spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
+            // Draw the player health
+            spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
 
             // Stop drawing
             spriteBatch.End();
@@ -324,7 +357,7 @@ namespace Shooter
 
             // Use the Keyboard / Dpad
             if (currentKeyboardState.IsKeyDown(Keys.Left) ||
-            currentGamePadState.DPad.Left == ButtonState.Pressed )
+            currentGamePadState.DPad.Left == ButtonState.Pressed)
             {
                 player.Position.X -= playerMoveSpeed;
             }
@@ -362,7 +395,7 @@ namespace Shooter
                 laserSound.Play();
             }
 
-            
+
 
             // reset score if player health goes to zero
             if (player.Health <= 0)
@@ -453,7 +486,7 @@ namespace Shooter
             }
         }
 
-       
+
 
         private void UpdateCollision()
         {
