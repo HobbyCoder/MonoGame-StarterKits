@@ -258,7 +258,7 @@ namespace VectorRumble
 
             DrawHud(elapsedTime);
 			
-#if ANDROID || IOS || WINDOWS_PHONE			
+#if ANDROID || IOS || WINDOWS_PHONE		
 			GamePad.Draw(gameTime, spriteBatch);
 #endif			
 

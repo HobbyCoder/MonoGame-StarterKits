@@ -10,7 +10,7 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-#if ANDROID
+#if ANDROID || PSM
 using Microsoft.Xna.Framework.Input.Touch;
 using System.Collections.Generic;
 #endif
@@ -37,7 +37,7 @@ namespace VectorRumble
         public readonly KeyboardState[] LastKeyboardStates;
         public readonly GamePadState[] LastGamePadStates;
 		
-#if ANDROID
+#if ANDROID || PSM
 		public TouchCollection CurrentTouchState;
 		public List<GestureSample> Gestures = new List<GestureSample>();
 #endif		
@@ -162,7 +162,7 @@ namespace VectorRumble
                 CurrentKeyboardStates[i] = Keyboard.GetState((PlayerIndex)i);
                 CurrentGamePadStates[i] = GamePad.GetState((PlayerIndex)i);
             }
-#if ANDROID			
+#if ANDROID	|| PSM		
 			CurrentTouchState = TouchPanel.GetState();
 			Gestures.Clear();
 			while(TouchPanel.IsGestureAvailable)

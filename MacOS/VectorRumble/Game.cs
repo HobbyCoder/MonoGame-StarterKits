@@ -21,7 +21,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
-#if WINDOWS_PHONE || IOS || ANDROID // WP7, iPad or Tablets only
+#if WINDOWS_PHONE || IOS || ANDROID || PSM // WP7, iPad or Tablets only
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
 #endregion
@@ -44,7 +44,7 @@ namespace VectorRumble
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 			
-#if WINDOWS_PHONE || IOS || ANDROID // WP7, iPad or Tablets only
+#if WINDOWS_PHONE || IOS || ANDROID || PSM// WP7, iPad or Tablets only
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 480;
 			graphics.IsFullScreen = true;

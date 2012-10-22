@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-#if ANDROID
+#if ANDROID || PSM
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
 #endregion
@@ -86,7 +86,7 @@ namespace VectorRumble
         /// </summary>
         public override void HandleInput(InputState input)
         {		
-#if ANDROID
+#if ANDROID || PSM
 			var touch = input.CurrentTouchState;
 			if (touch.Count > 0)
 			{
@@ -106,7 +106,7 @@ namespace VectorRumble
 			                Vector2 size = ScreenManager.Font.MeasureString(menuEntries[i].Text);	
 							position.X = viewportSize.X / 2f - size.X / 2f;
 							var rect = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
-							if (rect.Contains(pos))
+							if (rect.Contains((int)pos.X, (int)pos.Y))
 							{
 								selectedEntry = i;
 								OnSelectEntry(selectedEntry);
