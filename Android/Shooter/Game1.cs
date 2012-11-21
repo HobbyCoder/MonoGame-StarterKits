@@ -9,7 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
-#if WINDOWS_PHONE
+using System.Threading.Tasks;
+#if WINDOWS_PHONE || ANDROID
 using Microsoft.Devices.Sensors;
 #endif
 
@@ -77,11 +78,16 @@ namespace Shooter
         // The font used to display UI elements
         SpriteFont font;
 
+		Task loader; 
+
+		bool loading = true;
+
         bool accelActive;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+			graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
             Content.RootDirectory = "Content";
         }
 
@@ -126,26 +132,36 @@ namespace Shooter
             //Set player's score to zero
             score = 0;
 
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE || ANDROID
+			if (Microsoft.Devices.Sensors.Accelerometer.IsSupported)
+			{
 
-            Accelerometer accelSensor = new Accelerometer();
-            // Start the accelerometer
-            try
-            {
-                accelSensor.Start();
-                accelActive = true;
-                accelSensor.ReadingChanged += new EventHandler<AccelerometerReadingEventArgs>(accel_ReadingChanged);
-            }
-            catch (AccelerometerFailedException e)
-            {
-                // the accelerometer couldn't be started.  No fun!
-                accelActive = false;
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This exception is thrown in the emulator-which doesn't support an accelerometer.
-                accelActive = false;
-            }
+	            Accelerometer accelSensor = new Accelerometer();
+	            // Start the accelerometer
+	            try
+	            {
+	                accelSensor.Start();
+	                accelActive = true;
+#if ANDROID
+					accelSensor.CurrentValueChanged += delegate(object sender, SensorReadingEventArgs<AccelerometerReading> e) {
+						player.Position.X += (float)e.SensorReading.Acceleration.Y * playerMoveSpeed;
+						player.Position.Y += (float)e.SensorReading.Acceleration.X * playerMoveSpeed;
+					};
+#elif WINDOWS_PHONE
+	               accelSensor.ReadingChanged += new EventHandler<AccelerometerReadingEventArgs>(accel_ReadingChanged);
+#endif
+	            }
+	            catch (AccelerometerFailedException e)
+	            {
+	                // the accelerometer couldn't be started.  No fun!
+	                accelActive = false;
+	            }
+	            catch (UnauthorizedAccessException e)
+	            {
+	                // This exception is thrown in the emulator-which doesn't support an accelerometer.
+	                accelActive = false;
+	            }
+			}
             
 #endif
 
@@ -173,37 +189,45 @@ namespace Shooter
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            // Load the player resources
-            Animation playerAnimation = new Animation();
-            Texture2D playerTexture = Content.Load<Texture2D>("shipAnimation");
-            playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
 
-            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y
-            + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            player.Initialize(playerAnimation, playerPosition);
-            // Load the parallaxing background
-            bgLayer1.Initialize(Content, "bgLayer1", GraphicsDevice.Viewport.Width, -1);
-            bgLayer2.Initialize(Content, "bgLayer2", GraphicsDevice.Viewport.Width, -2);
-            enemyTexture = Content.Load<Texture2D>("mineAnimation");
-            projectileTexture = Content.Load<Texture2D>("laser");
-            explosionTexture = Content.Load<Texture2D>("explosion");
+			// Load the score font
+			font = Content.Load<SpriteFont>("gameFont");
 
-            mainBackground = Content.Load<Texture2D>("mainbackground");
-            // Load the music
-            gameplayMusic = Content.Load<Song>("Sounds\\gameMusic");
-
-            // Load the laser and explosion sound effect
-            laserSound = Content.Load<SoundEffect>("Sounds\\laserFire");
-            explosionSound = Content.Load<SoundEffect>("Sounds\\explosion");
-
-            // Start the music right away
-            PlayMusic(gameplayMusic);
-
-            // Load the score font
-            font = Content.Load<SpriteFont>("gameFont");
-
-
+			// Load the Assets on a background Thread
+			loader = Task.Factory.StartNew(() => LoadAssets());           
         }
+
+		private void LoadAssets()
+		{
+			// Load the player resources
+			Animation playerAnimation = new Animation();
+			Texture2D playerTexture = Content.Load<Texture2D>("shipAnimation");
+			playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
+			
+			Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y
+			                                     + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+			player.Initialize(playerAnimation, playerPosition);
+			// Load the parallaxing background
+			bgLayer1.Initialize(Content, "bgLayer1", GraphicsDevice.Viewport.Width, -1);
+			bgLayer2.Initialize(Content, "bgLayer2", GraphicsDevice.Viewport.Width, -2);
+			enemyTexture = Content.Load<Texture2D>("mineAnimation");
+			projectileTexture = Content.Load<Texture2D>("laser");
+			explosionTexture = Content.Load<Texture2D>("explosion");
+			
+			mainBackground = Content.Load<Texture2D>("mainbackground");
+			// Load the music
+			gameplayMusic = Content.Load<Song>("Sounds\\gameMusic");
+			
+			// Load the laser and explosion sound effect
+			laserSound = Content.Load<SoundEffect>("Sounds\\laserFire");
+			explosionSound = Content.Load<SoundEffect>("Sounds\\explosion");
+			
+			// Start the music right away
+			PlayMusic(gameplayMusic);
+			
+
+			loading = false;
+		}
 
         private void PlayMusic(Song song)
         {
@@ -244,36 +268,31 @@ namespace Shooter
 
             base.Update(gameTime);
 
-            // Save the previous state of the keyboard and game pad so we can determinesingle key/button presses
-            previousGamePadState = currentGamePadState;
-            previousKeyboardState = currentKeyboardState;
+			if (!loading)
+			{
+	            // Save the previous state of the keyboard and game pad so we can determinesingle key/button presses
+	            previousGamePadState = currentGamePadState;
+	            previousKeyboardState = currentKeyboardState;
 
-            // Read the current state of the keyboard and gamepad and store it
-            currentKeyboardState = Keyboard.GetState();
-            currentGamePadState = GamePad.GetState(PlayerIndex.One);
+	            // Read the current state of the keyboard and gamepad and store it
+	            currentKeyboardState = Keyboard.GetState();
+	            currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
 
-            //Update the player
-            UpdatePlayer(gameTime);
+	            //Update the player
+	            UpdatePlayer(gameTime);
 
-            // Update the parallaxing background
-            bgLayer1.Update();
-            bgLayer2.Update();
+	            // Update the parallaxing background
+	            bgLayer1.Update();
+	            bgLayer2.Update();
 
-            // Update the enemies
-            UpdateEnemies(gameTime);
+	            // Update the enemies
+	            UpdateEnemies(gameTime);
 
-            // Update the explosions
-            UpdateExplosions(gameTime);
+	            // Update the explosions
+	            UpdateExplosions(gameTime);
 
-#if MONOGAME
-            var state = Accelerometer.GetState();
-
-            player.Position.X += (float)state.Acceleration.Y * playerMoveSpeed;
-            player.Position.Y += (float)state.Acceleration.X * playerMoveSpeed;
-
-#endif
-
+			}
 
         }
 
@@ -291,51 +310,60 @@ namespace Shooter
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            // Start drawing
-            spriteBatch.Begin();
 
-#if WINDOWS_PHONE
-            spriteBatch.Draw(mainBackground, Vector2.Zero, Color.White);
-#endif
+			if (!loading)
+			{
+	            // Start drawing
+	            spriteBatch.Begin();
 
-#if MONOGAME
-            spriteBatch.Draw(mainBackground, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 1.3f, SpriteEffects.None, 0);
-#endif
+	#if WINDOWS_PHONE
+	            spriteBatch.Draw(mainBackground, Vector2.Zero, Color.White);
+	#endif
 
-            // Draw the moving background
-            bgLayer1.Draw(spriteBatch);
-            bgLayer2.Draw(spriteBatch);
+	#if MONOGAME
+	            spriteBatch.Draw(mainBackground, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 1.3f, SpriteEffects.None, 0);
+	#endif
 
-            // Draw the Enemies
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                enemies[i].Draw(spriteBatch);
-            }
+	            // Draw the moving background
+	            bgLayer1.Draw(spriteBatch);
+	            bgLayer2.Draw(spriteBatch);
 
-            // Draw the Projectiles
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                projectiles[i].Draw(spriteBatch);
-            }
+	            // Draw the Enemies
+	            for (int i = 0; i < enemies.Count; i++)
+	            {
+	                enemies[i].Draw(spriteBatch);
+	            }
 
-            // Draw the Player
-            player.Draw(spriteBatch);
-            // Draw the explosions
-            for (int i = 0; i < explosions.Count; i++)
-            {
-                explosions[i].Draw(spriteBatch);
+	            // Draw the Projectiles
+	            for (int i = 0; i < projectiles.Count; i++)
+	            {
+	                projectiles[i].Draw(spriteBatch);
+	            }
 
-            }
+	            // Draw the Player
+	            player.Draw(spriteBatch);
+	            // Draw the explosions
+	            for (int i = 0; i < explosions.Count; i++)
+	            {
+	                explosions[i].Draw(spriteBatch);
 
-            // Draw the score
-            spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
-            // Draw the player health
-            spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
+	            }
 
-            // Stop drawing
-            spriteBatch.End();
-            // TODO: Add your drawing code here
+	            // Draw the score
+	            spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
+	            // Draw the player health
+	            spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
 
+	            // Stop drawing
+	            spriteBatch.End();
+	            // TODO: Add your drawing code here
+
+			} else {
+
+				spriteBatch.Begin();
+				spriteBatch.DrawString(font, "Loading", Vector2.Zero, Color.White);
+				spriteBatch.End();
+			}
             base.Draw(gameTime);
         }
 
