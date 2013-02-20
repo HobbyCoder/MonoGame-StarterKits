@@ -52,9 +52,11 @@ namespace Platformer
         private GamePadState gamePadState;
         private KeyboardState keyboardState;
         private TouchCollection touchState;
+#if WINDOWS_PHONE 
         private AccelerometerState accelerometerState;
-        
-        // The number of levels in the Levels directory of our content. We assume that
+#endif
+
+		// The number of levels in the Levels directory of our content. We assume that
         // levels in our content are 0-based and that all numbers under this constant
         // have a level file present. This allows us to not need to check for the file
         // or handle exceptions, both of which can add unnecessary time to level loading.
@@ -73,7 +75,7 @@ namespace Platformer
 			graphics.PreferredBackBufferWidth = 800;
 			graphics.PreferredBackBufferHeight = 480;
 #else
-			graphics.IsFullScreen = true;
+			graphics.IsFullScreen = false;
 			graphics.SupportedOrientations =  DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 #endif		
 #if WINDOWS_PHONE 
@@ -124,8 +126,15 @@ namespace Platformer
             HandleInput();
 
             // update our level, passing down the GameTime along with all of our input states
-            level.Update(gameTime, keyboardState, gamePadState, touchState, 
-                         accelerometerState, Window.CurrentOrientation);
+            level.Update(
+				gameTime, 
+				keyboardState, 
+				gamePadState, 
+				touchState, 
+#if WINDOWS_PHONE 
+                accelerometerState, 
+#endif
+				Window.CurrentOrientation);
 
             base.Update(gameTime);
         }
@@ -138,12 +147,17 @@ namespace Platformer
             gamePadState = GamePad.GetState(PlayerIndex.One);
 #endif
             touchState = TouchPanel.GetState();
+
+#if WINDOWS_PHONE 
             accelerometerState = Accelerometer.GetState();
+#endif
 
 #if !IPHONE
             // Exit the game when back is pressed.
-            if (gamePadState.Buttons.Back == ButtonState.Pressed)
-                Exit();
+			if ((gamePadState.Buttons.Back == ButtonState.Pressed) || (keyboardState.IsKeyDown(Keys.Escape)))
+			{
+				Exit();
+			}
 #endif
             bool continuePressed =
 #if !IPHONE

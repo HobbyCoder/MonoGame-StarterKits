@@ -377,8 +377,10 @@ namespace Platformer
             KeyboardState keyboardState, 
             GamePadState gamePadState, 
             TouchCollection touchState, 
+#if WINDOWS_PHONE
             AccelerometerState accelState,
-            DisplayOrientation orientation)
+#endif
+			DisplayOrientation orientation)
         {
             // Pause while the player is dead or time is expired.
             if (!Player.IsAlive || TimeRemaining == TimeSpan.Zero)
@@ -397,7 +399,15 @@ namespace Platformer
             else
             {
                 timeRemaining -= gameTime.ElapsedGameTime;
-                Player.Update(gameTime, keyboardState, gamePadState, touchState, accelState, orientation);
+                Player.Update(
+					gameTime, 
+					keyboardState, 
+					gamePadState, 
+					touchState,
+#if WINDOWS_PHONE
+					accelState, 
+#endif
+					orientation);
                 UpdateGems(gameTime);
 
                 // Falling off the bottom of the level kills the player.

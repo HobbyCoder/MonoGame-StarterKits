@@ -507,16 +507,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MonoGame\MonoGame.Framework\MonoGame.Framework.Windows.csproj">
-      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
-      <Name>MonoGame.Framework.Windows</Name>
-    </ProjectReference>
     <ProjectReference Include="CardsFramework.Windows.csproj">
       <Project>{6DE82385-D762-4275-9185-F42995282478}</Project>
       <Name>CardsFramework.Windows</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework.Windows, Version=2.5.1.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System.Core">
     </Reference>
     <Reference Include="System">

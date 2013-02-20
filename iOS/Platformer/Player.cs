@@ -178,10 +178,18 @@ namespace Platformer
             KeyboardState keyboardState, 
             GamePadState gamePadState, 
             TouchCollection touchState, 
+#if WINDOWS_PHONE 
             AccelerometerState accelState,
-            DisplayOrientation orientation)
+#endif
+			DisplayOrientation orientation)
         {
-            GetInput(keyboardState, gamePadState, touchState, accelState, orientation);
+            GetInput(keyboardState, 
+				gamePadState, 
+				touchState,
+#if WINDOWS_PHONE 
+				accelState,
+#endif
+				orientation);
 
             ApplyPhysics(gameTime);
 
@@ -209,7 +217,9 @@ namespace Platformer
             KeyboardState keyboardState, 
             GamePadState gamePadState, 
             TouchCollection touchState,
+#if WINDOWS_PHONE 
             AccelerometerState accelState, 
+#endif
             DisplayOrientation orientation)
         {
             // Get analog horizontal movement.
@@ -218,7 +228,7 @@ namespace Platformer
             // Ignore small movements to prevent running in place.
             if (Math.Abs(movement) < 0.5f)
                 movement = 0.0f;
-
+#if WINDOWS_PHONE 
             // Move the player with accelerometer
             if (Math.Abs(accelState.Acceleration.Y) > 0.10f)
             {
@@ -229,8 +239,9 @@ namespace Platformer
                 if (orientation == DisplayOrientation.LandscapeRight)
                     movement = -movement;
             }
+#endif
 
-            // If any digital horizontal movement input is found, override the analog movement.
+			// If any digital horizontal movement input is found, override the analog movement.
             if (gamePadState.IsButtonDown(Buttons.DPadLeft) ||
                 keyboardState.IsKeyDown(Keys.Left) ||
                 keyboardState.IsKeyDown(Keys.A))
