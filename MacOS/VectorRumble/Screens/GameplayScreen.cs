@@ -36,7 +36,9 @@ namespace VectorRumble
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
         Texture2D starTexture;
+#if ANDROID || IOS
 		Texture2D gamePadTexture;
+#endif
         World world;
         AudioManager audio;
         bool gameOver;
