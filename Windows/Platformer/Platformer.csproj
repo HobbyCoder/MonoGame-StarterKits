@@ -1,50 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{595A3D98-2DFE-4C6A-ABBB-59E5E3A6776A}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Platformer</RootNamespace>
-    <AssemblyName>Platformer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
+    <ProjectGuid>{BFA52EB8-3F71-45EE-BACB-BC568CD8DBBF}</ProjectGuid>
+    <ProjectTypeGuids>{9B831FEF-F496-498F-9FE8-180DA5CB4258};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Platformer1</RootNamespace>
+    <MonoGamePlatform>WindowsGL</MonoGamePlatform>
+    <AssemblyName>Platformer1</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
+    <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="MonoGame.Framework" />
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\iOS\Platformer\Accelerometer.cs">
       <Link>Accelerometer.cs</Link>
     </Compile>
@@ -81,14 +76,14 @@
     <Compile Include="..\..\iOS\Platformer\TouchCollectionExtensions.cs">
       <Link>TouchCollectionExtensions.cs</Link>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MonoGame.Framework\MonoGame.Framework.Windows.csproj">
-      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
-      <Name>MonoGame.Framework.Windows</Name>
-    </ProjectReference>
+    <None Include="..\..\iOS\Platformer\Background.png">
+      <Link>Background.png</Link>
+    </None>
+    <None Include="..\..\iOS\Platformer\Default.png">
+      <Link>Default.png</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\iOS\Platformer\Content\Backgrounds\Layer0_0.png">
@@ -127,6 +122,10 @@
       <Link>Content\Backgrounds\Layer2_2.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Fonts\Hud.xnb">
+      <Link>Content\Fonts\Hud.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\iOS\Platformer\Content\Levels\0.txt">
       <Link>Content\Levels\0.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -151,32 +150,64 @@
       <Link>Content\Overlays\you_win.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sounds\ExitReached.wav">
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\ExitReached.mp3">
       <Link>Content\Sounds\ExitReached.mp3</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\ExitReached.wav">
+      <Link>Content\Sounds\ExitReached.wav</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\GemCollected.mp3">
+      <Link>Content\Sounds\GemCollected.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\iOS\Platformer\Content\Sounds\GemCollected.wav">
       <Link>Content\Sounds\GemCollected.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\MonsterKilled.mp3">
+      <Link>Content\Sounds\MonsterKilled.mp3</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\iOS\Platformer\Content\Sounds\MonsterKilled.wav">
       <Link>Content\Sounds\MonsterKilled.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sounds\Music.wav">
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\Music.mp3">
       <Link>Content\Sounds\Music.mp3</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\Music.wav">
+      <Link>Content\Sounds\Music.wav</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\PlayerFall.mp3">
+      <Link>Content\Sounds\PlayerFall.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\iOS\Platformer\Content\Sounds\PlayerFall.wav">
       <Link>Content\Sounds\PlayerFall.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\PlayerJump.mp3">
+      <Link>Content\Sounds\PlayerJump.mp3</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\iOS\Platformer\Content\Sounds\PlayerJump.wav">
       <Link>Content\Sounds\PlayerJump.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\PlayerKilled.mp3">
+      <Link>Content\Sounds\PlayerKilled.mp3</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\iOS\Platformer\Content\Sounds\PlayerKilled.wav">
       <Link>Content\Sounds\PlayerKilled.wav</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sounds\PowerUp.mp3">
+      <Link>Content\Sounds\PowerUp.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\iOS\Platformer\Content\Sounds\PowerUp.wav">
@@ -185,58 +216,6 @@
     </Content>
     <Content Include="..\..\iOS\Platformer\Content\Sprites\Gem.png">
       <Link>Content\Sprites\Gem.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterA\Idle.png">
-      <Link>Content\Sprites\MonsterA\Idle.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterA\Run.png">
-      <Link>Content\Sprites\MonsterA\Run.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterB\Idle.png">
-      <Link>Content\Sprites\MonsterB\Idle.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterB\Run.png">
-      <Link>Content\Sprites\MonsterB\Run.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterC\Idle.png">
-      <Link>Content\Sprites\MonsterC\Idle.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterC\Run.png">
-      <Link>Content\Sprites\MonsterC\Run.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterD\Idle.png">
-      <Link>Content\Sprites\MonsterD\Idle.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterD\Run.png">
-      <Link>Content\Sprites\MonsterD\Run.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Celebrate.png">
-      <Link>Content\Sprites\Player\Celebrate.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Die.png">
-      <Link>Content\Sprites\Player\Die.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Idle.png">
-      <Link>Content\Sprites\Player\Idle.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Jump.png">
-      <Link>Content\Sprites\Player\Jump.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Run.png">
-      <Link>Content\Sprites\Player\Run.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\iOS\Platformer\Content\Tiles\BlockA0.png">
@@ -283,20 +262,57 @@
       <Link>Content\Tiles\Platform.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\iOS\Platformer\Content\Fonts\Hud.xnb">
-      <Link>Content\Fonts\Hud.xnb</Link>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Celebrate.png">
+      <Link>Content\Sprites\Player\Celebrate.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Die.png">
+      <Link>Content\Sprites\Player\Die.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Idle.png">
+      <Link>Content\Sprites\Player\Idle.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Jump.png">
+      <Link>Content\Sprites\Player\Jump.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\Player\Run.png">
+      <Link>Content\Sprites\Player\Run.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterA\Idle.png">
+      <Link>Content\Sprites\MonsterA\Idle.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterA\Run.png">
+      <Link>Content\Sprites\MonsterA\Run.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterB\Idle.png">
+      <Link>Content\Sprites\MonsterB\Idle.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterB\Run.png">
+      <Link>Content\Sprites\MonsterB\Run.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterC\Idle.png">
+      <Link>Content\Sprites\MonsterC\Idle.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterC\Run.png">
+      <Link>Content\Sprites\MonsterC\Run.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterD\Idle.png">
+      <Link>Content\Sprites\MonsterD\Idle.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\iOS\Platformer\Content\Sprites\MonsterD\Run.png">
+      <Link>Content\Sprites\MonsterD\Run.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
